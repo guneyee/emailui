@@ -1,0 +1,420 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #eaf2fb;
+  }
+  
+  .container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .sidebar {
+    width: 220px;
+    background: linear-gradient(180deg, #3a5fc8 0%, #4fc3f7 100%);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 0;
+    flex-shrink: 0; /* Prevent shrinking */
+  }
+  
+  .logo {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  
+  .sidebar nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .sidebar nav ul li {
+    padding: 16px 32px;
+    cursor: pointer;
+    opacity: 0.85;
+    transition: background 0.2s, opacity 0.2s;
+    border-left: 4px solid transparent;
+  }
+  
+  .sidebar nav ul li.active,
+  .sidebar nav ul li:hover {
+    background: rgba(255,255,255,0.1);
+    opacity: 1;
+    border-left: 4px solid #fff;
+  }
+  
+  main {
+    display: flex;
+    flex: 1;
+    background: #fff;
+    border-radius: 12px 0 0 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(60,60,120,0.08);
+    /* Ensure content takes full width when list is hidden */
+    position: relative; /* Needed for absolute positioning if used later */
+  }
+  
+  .inbox-list {
+    width: 300px;
+    background: #f7fafd;
+    border-right: 1px solid #e0e6ed;
+    overflow-y: auto;
+    flex-shrink: 0; /* Prevent shrinking */
+  }
+  
+  .inbox-item {
+    padding: 18px 24px;
+    border-bottom: 1px solid #e0e6ed;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  .inbox-item.selected,
+  .inbox-item:hover {
+    background: #eaf2fb;
+  }
+  
+  .inbox-item .sender {
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  
+  .inbox-item .snippet {
+    font-size: 0.95em;
+    color: #6b7a90;
+  }
+  
+  .email-detail {
+    flex: 1;
+    padding: 40px 48px;
+    overflow-y: auto;
+  }
+  
+  #calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .calendar-day {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+    border-radius: 8px;
+    background: #f9f9f9;
+    font-weight: bold;
+  }
+  
+  
+  
+  .email-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  
+  .email-header img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    margin-right: 16px;
+  }
+  
+  .email-header .info {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .email-header .name {
+    font-weight: 600;
+  }
+  
+  .email-header .email {
+    font-size: 0.95em;
+    color: #6b7a90;
+  }
+  
+  .email-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+  
+  .email-body {
+    color: #4a5a6a;
+    line-height: 1.7;
+  }
+  
+  .show-chart-btn {
+    margin-top: 32px;
+    padding: 10px 24px;
+    background: #3a5fc8;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background 0.2s;
+  }
+  
+  .show-chart-btn:hover {
+    background: #4fc3f7;
+    color: #222;
+  }
+  
+  .chart-modal {
+    display: none;
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 480px;
+    height: 320px;
+    background: #fff;
+    box-shadow: 0 8px 32px rgba(60,60,120,0.18);
+    border-radius: 12px;
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+  }
+  
+  .chart-modal.active {
+    display: flex;
+  }
+
+  .sidebar nav ul li.active,
+.sidebar nav ul li:hover {
+  background: rgba(255,255,255,0.1);
+  opacity: 1;
+  border-left: 4px solid #fff; /* This creates the white bar */
+}
+
+/* Also ensure the calendar view is hidden by default */
+.calendar-view {
+  flex: 1;
+  padding: 40px 48px;
+  overflow-y: auto;
+  display: none; /* Hide by default */
+}
+
+/* Added styles for the simpler calendar */
+.calendar-container-simple {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.calendar-header-simple {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.calendar-header-simple button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 5px 10px;
+  color: #333;
+}
+
+.calendar-header-simple button:hover {
+  color: #007bff;
+}
+
+.display {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #333;
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.weekdays div {
+  text-align: center;
+  font-weight: bold;
+  color: #666;
+  padding: 10px;
+}
+
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+}
+
+.days div {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.days div:hover {
+  background: #e9ecef;
+}
+
+.days div.current-date {
+  background: #007bff;
+  color: white;
+}
+
+.days div.selected-day {
+  background: #28a745;
+  color: white;
+}
+
+.days div.has-tasks::after {
+  content: '';
+  position: absolute;
+  bottom: 5px;
+  width: 5px;
+  height: 5px;
+  background: #dc3545;
+  border-radius: 50%;
+}
+
+.selected {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 5px;
+}
+
+.task-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background: white;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.task-priority {
+  padding: 3px 8px;
+  border-radius: 3px;
+  font-size: 0.8em;
+}
+
+.task-priority.high {
+  background: #dc3545;
+  color: white;
+}
+
+.task-priority.medium {
+  background: #ffc107;
+  color: black;
+}
+
+.task-priority.low {
+  background: #28a745;
+  color: white;
+}
+
+.task-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.task-modal.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.task-modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 500px;
+}
+
+.task-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.close-task-modal {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.add-task-btn {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.add-task-btn:hover {
+  background: #0056b3;
+}
+
+.no-tasks {
+  color: #666;
+  text-align: center;
+  padding: 10px;
+}

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Email Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <div class="logo" id="logo-button">📧</div>
+      <nav>
+        <ul>
+          <li id="inbox-link" class="active">All Inbox</li>
+          <li id="smart-link">Smart Inbox</li>
+          <li id="task-link"><span class="icon">✓</span> Task</li>
+          <li id="calendar-link">Calendar</li>
+          <li id="pins-link">Pins</li>
+          <li>Spam</li>
+          <li>Trash</li>
+          <li>Compose</li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main>
+      <!-- Inbox -->
+      <div class="inbox-container">
+        <section id="inbox-list" class="view-section">
+          <h2>Inbox</h2>
+          <!-- JS will populate emails here -->
+        </section>
+
+        <!-- Email Detail -->
+        <section id="email-detail" class="view-section">
+          <h3>Email Detail</h3>
+          <p>Select an email to view details.</p>
+        </section>
+      </div>
+
+      <!-- Smart Inbox -->
+      <section id="smart-view" class="view-section" style="display: none;">
+        <h2>Smart Inbox</h2>
+        <p>This is the Smart Inbox view.</p>
+      </section>
+
+      <!-- Tasks -->
+      <section id="task-view" class="view-section" style="display: none;">
+        <h2>Task List</h2>
+        <div id="all-tasks-container">
+          <!-- Tasks will be rendered here by JavaScript -->
+        </div>
+        <button class="add-task-btn" id="addTaskBtnTaskView">+ Add Task</button>
+      </section>
+
+      <!-- Calendar -->
+      <section id="calendar-view" class="view-section">
+        <div id="calendar" class="calendar-grid"></div>
+        <div class="selected-display"></div>
+      </section>
+
+      <!-- Other -->
+      <section id="other-view" class="view-section" style="display: none;">
+        <h2 id="other-title">Other</h2>
+        <p id="other-content">Content for this section will go here...</p>
+      </section>
+    </main>
+  </div>
+
+  <!-- Chart Modal -->
+  <div id="chart-modal" class="modal">
+    <div class="modal-content">
+      <button class="close-modal">&times;</button>
+      <h2>Chart</h2>
+      <canvas id="chart"></canvas>
+    </div>
+  </div>
+
+  <!-- Task Modal -->
+  <div id="task-modal" class="modal">
+    <div class="modal-content">
+      <button class="close-modal">&times;</button>
+      <h2>Add Task</h2>
+      <form id="task-form">
+        <div class="form-group">
+          <label for="task-title">Title</label>
+          <input type="text" id="task-title" required>
+        </div>
+        <div class="form-group">
+          <label for="task-time">Time</label>
+          <input type="time" id="task-time" required>
+        </div>
+        <div class="form-group">
+          <label for="task-description">Description</label>
+          <textarea id="task-description"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="task-priority">Priority</label>
+          <select id="task-priority" required>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="task-date">Date</label>
+          <input type="date" id="task-date" required>
+        </div>
+        <button type="submit">Save Task</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Script -->
+  <script src="app.js"></script>
+</body>
+</html>
