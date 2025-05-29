@@ -78,6 +78,8 @@ A feature-rich email application built with HTML, CSS, and JavaScript that provi
 2. Open `index.html` in your web browser
 3. Start using the application!
 
+![Email Application Screenshot](https://github.com/example-user/email-app/blob/main/screenshot.png?raw=true)
+
 ## Usage
 
 ### Managing Emails
