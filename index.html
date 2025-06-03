@@ -2,67 +2,58 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Email Dashboard</title>
   <link rel="stylesheet" href="styles.css" />
-  <!-- Chart.js -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <div class="container">
     <aside class="sidebar">
-      <div class="logo" id="logo-button">&#9776;
-</div>
+      <div class="logo">📧</div>
       <nav>
         <ul>
-          <li id="inbox-link" class="active">All Inbox</li>
-          <li id="smart-link">Smart Inbox</li>
-          <li id="task-link"><span class="icon">✓</span> Task</li>
-          <li id="calendar-link">Calendar</li>
-          <li id="pins-link">Pins</li>
-          <li>Spam</li>
-          <li>Trash</li>
-          <li>Compose</li>
+          <li class="active"><span class="icon">📥</span> All Inbox</li>
+          <li><span class="icon">📨</span> Smart Inbox</li>
+          <li><span class="icon">✅</span> Task</li>
+          <li><span class="icon">📅</span> Calendar</li>
+          <li><span class="icon">📌</span> Pins</li>
+          <li><span class="icon">🚫</span> Spam</li>
+          <li><span class="icon">🗑️</span> Trash</li>
+          <li><button class="compose-btn">+ Compose</button></li>
         </ul>
       </nav>
     </aside>
 
     <main>
-      <!-- Inbox -->
       <div class="inbox-container">
         <section id="inbox-list" class="view-section">
           <h2>Inbox</h2>
-          <!-- JS will populate emails here -->
         </section>
 
-        <!-- Email Detail -->
         <section id="email-detail" class="view-section">
           <h3>Email Detail</h3>
           <p>Select an email to view details.</p>
         </section>
       </div>
 
-      <!-- Smart Inbox -->
       <section id="smart-view" class="view-section" style="display: none;">
         <h2>Smart Inbox</h2>
         <p>This is the Smart Inbox view.</p>
       </section>
 
-      <!-- Tasks -->
       <section id="task-view" class="view-section" style="display: none;">
         <h2>Task List</h2>
-        <div id="all-tasks-container">
-          <!-- Tasks will be rendered here by JavaScript -->
-        </div>
+        <div id="all-tasks-container"></div>
         <button class="add-task-btn" id="addTaskBtnTaskView">+ Add Task</button>
       </section>
 
-      <!-- Calendar -->
       <section id="calendar-view" class="view-section">
         <div id="calendar" class="calendar-grid"></div>
         <div class="selected-display"></div>
       </section>
 
-      <!-- Other -->
       <section id="other-view" class="view-section" style="display: none;">
         <h2 id="other-title">Other</h2>
         <p id="other-content">Content for this section will go here...</p>
@@ -70,7 +61,6 @@
     </main>
   </div>
 
-  <!-- Chart Modal -->
   <div id="chart-modal" class="modal">
     <div class="modal-content">
       <button class="close-modal">&times;</button>
@@ -79,7 +69,6 @@
     </div>
   </div>
 
-  <!-- Task Modal -->
   <div id="task-modal" class="modal">
     <div class="modal-content">
       <button class="close-modal">&times;</button>
@@ -114,7 +103,6 @@
     </div>
   </div>
 
-  <!-- Script -->
   <script src="app.js"></script>
 </body>
 </html>
