@@ -174,7 +174,7 @@ const calendar = document.getElementById('calendar');
 const selectedDisplay = document.querySelector('.selected-display');
 const taskModal = document.getElementById('task-modal');
 const taskForm = document.getElementById('task-form');
-const closeTaskModal = taskModal.querySelector('.close-modal');
+const closeTaskModal = taskModal ? taskModal.querySelector('.close-modal') : null;
 const addTaskBtn = document.querySelector('.add-task-btn');
 const addTaskBtnTaskView = document.getElementById('addTaskBtnTaskView');
 const allTasksContainer = document.getElementById('all-tasks-container');
@@ -639,8 +639,8 @@ function renderSmartInbox() {
   smartEmails.forEach((email, idx) => {
     const item = document.createElement('div');
     item.className = 'inbox-item';
-    if (email.isPinned) item.classList.add('pinned'); // Add pinned class if applicable
-    if (email.isDraft) item.classList.add('draft'); // Add draft class if applicable
+    if (email.isPinned) item.classList.add('pinned');
+    if (email.isDraft) item.classList.add('draft'); // Should not appear in smart inbox normally
 
     item.innerHTML = `
       <div class="email-preview">
@@ -649,13 +649,12 @@ function renderSmartInbox() {
           <div class="sender">${email.sender}</div>
         </div>
         <div class="email-content">
+          <div class="email-meta">
+             <span class="time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+             ${email.isPinned ? '<span class="pin-badge">📍</span>' : ''}
+          </div>
           <div class="title">${email.title}</div>
           <div class="snippet">${email.snippet}</div>
-        </div>
-        <div class="email-meta">
-          <span class="time">${new Date().toLocaleTimeString()}</span>
-          ${email.isPinned ? '<span class="pin-badge">📍</span>' : ''}
-          ${email.isDraft ? '<span class="draft-badge">Draft</span>' : ''}
         </div>
       </div>
       <div class="email-actions">
@@ -1397,7 +1396,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Dynamically assign IDs to sidebar links and add click listeners
-  const sidebarLinks = document.querySelectorAll('.sidebar nav ul li'); // Re-select sidebar links
+  const sidebarLinks = document.querySelectorAll('.sidebar nav ul li');
   sidebarLinks.forEach(link => {
       const linkText = link.textContent.trim();
       // Dynamically assign link IDs based on text content (lowercase, remove non-alphanumeric, add -link suffix)
@@ -1413,7 +1412,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(`Sidebar link clicked: ${linkId}`); // Log click event
 
         // Call showView with the linkId to show the correct container
-        showView(linkId); // Pass the link ID as a parameter
+        showView(linkId);
         reRenderActiveView(); // Render the content within the shown container
       });
     });
@@ -1481,42 +1480,42 @@ document.addEventListener('DOMContentLoaded', () => {
   taskForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    const task = {
-      title: document.getElementById('task-title').value,
-      time: document.getElementById('task-time').value,
-      description: document.getElementById('task-description').value,
-      priority: document.getElementById('task-priority').value,
-      isPinned: false
-    };
+     const task = {
+       title: document.getElementById('task-title').value,
+       time: document.getElementById('task-time').value,
+       description: document.getElementById('task-description').value,
+       priority: document.getElementById('task-priority').value,
+       isPinned: false
+     };
 
-    const dateInput = document.getElementById('task-date').value;
-    const taskDateKey = dateInput ? new Date(dateInput).toDateString() : new Date().toDateString();
+     const dateInput = document.getElementById('task-date').value;
+     const taskDateKey = dateInput ? new Date(dateInput).toDateString() : new Date().toDateString();
 
-    if (!tasks[taskDateKey]) {
-      tasks[taskDateKey] = [];
-    }
-    tasks[taskDateKey].push(task);
-    
-    // Save to localStorage
-    localStorage.setItem('calendarTasks', JSON.stringify(tasks));
-    console.log('Task saved:', task);
-    console.log('All tasks:', tasks);
+     if (!tasks[taskDateKey]) {
+       tasks[taskDateKey] = [];
+     }
+     tasks[taskDateKey].push(task);
+     
+     // Save to localStorage
+     localStorage.setItem('calendarTasks', JSON.stringify(tasks));
+     console.log('Task saved:', task);
+     console.log('All tasks:', tasks);
 
-    // Close modal and reset form
-    taskModal.classList.remove('active');
-    taskForm.reset();
-    selectedDateForTask = null;
+     // Close modal and reset form
+     taskModal.classList.remove('active');
+     taskForm.reset();
+     selectedDateForTask = null;
 
-    // Update UI
-    renderCalendar();
-    renderAllTasks();
-    renderPinnedItems();
-    
-    // If we're in calendar view, update the selected date's tasks
-    if (document.getElementById('calendar-view').style.display === 'block') {
-      displayTasksForDate(taskDateKey);
-    }
-  });
+     // Update UI
+     renderCalendar();
+     renderAllTasks();
+     renderPinnedItems();
+     
+     // If we're in calendar view, update the selected date's tasks
+     if (document.getElementById('calendar-view').style.display === 'block') {
+       displayTasksForDate(taskDateKey);
+     }
+   });
 
 
   addTaskBtnTaskView.addEventListener('click', () => {
@@ -1525,8 +1524,6 @@ document.addEventListener('DOMContentLoaded', () => {
     taskForm.reset();
     document.getElementById('task-date').value = '';
   });
-
-  // Initial view is set by simulating click on DOMContentLoaded - Handled above
 });
   
   
