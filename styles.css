@@ -1,4 +1,3 @@
-/* Genel Stiller */
 * {
   margin: 0;
   padding: 0;
@@ -22,16 +21,17 @@ body {
 /* Sidebar */
 .sidebar {
   width: 250px;
-  background: #ffffff;
+  background:  #2d4781;
   padding: 20px;
   border-right: 1px solid #eee;
+  opacity: 0.85;
 }
 
 .logo {
   font-size: 32px;
   margin-bottom: 30px;
   text-align: center;
-  color: #3a5fc8;
+  color: #ffffff;
   cursor: pointer;
   padding: 10px;
   border-radius: 50%;
@@ -42,7 +42,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 30px;
+  margin-right: 10 auto 30px;
 }
 
 .logo:hover {
@@ -66,6 +66,7 @@ body {
   transition: all 0.2s ease-in-out;
   display: flex;
   align-items: center;
+  color: rgb(160, 160, 160);
 }
 
 .sidebar nav ul li .icon {
@@ -114,7 +115,7 @@ body {
   font-size: 1.2rem;
 }
 
-/* Ana İçerik */
+/* main */
 main {
   flex: 1;
   display: flex;
@@ -161,8 +162,6 @@ main {
   overflow-y: auto;
   height: calc(100vh - 40px);
 }
-
-/* E-posta Listesi */
 .inbox-item {
   padding: 15px;
   border-bottom: 1px solid #eee;
@@ -234,8 +233,7 @@ main {
   color: #dc3545;
   font-size: 0.9em;
 }
-
-/* E-posta Detayı */
+*/
 .email-header {
   display: flex;
   align-items: center;
@@ -335,8 +333,6 @@ main {
 .show-chart-btn:hover {
   background: #2c4ba3;
 }
-
-/* Takvim */
 .calendar-grid {
   width: 100%;
   max-width: 1000px;
@@ -448,7 +444,6 @@ main {
   justify-content: center;
 }
 
-/* Görev Listesi */
 .task-list-container {
   background: white;
   border-radius: 10px;
@@ -572,7 +567,6 @@ main {
   padding: 20px;
 }
 
-/* Modaller */
 .modal {
   display: none;
   position: fixed;
@@ -616,7 +610,6 @@ main {
   color: #333;
 }
 
-/* Form Stilleri */
 .form-group {
   margin-bottom: 15px;
 }
@@ -803,7 +796,6 @@ button[type="submit"]:hover {
   margin-bottom: 15px;
 }
 
-/* Email Preview */
 .email-preview {
   display: flex;
   align-items: flex-start;
@@ -1025,3 +1017,38 @@ button[type="submit"]:hover {
   90% { opacity: 1; transform: translateY(0); }
   100% { opacity: 0; transform: translateY(-20px); }
 } 
+
+/* Inbox Controls */
+.inbox-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.inbox-controls .search-box {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.inbox-controls .search-box input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.inbox-controls .filter-btn {
+  background: #3a5fc8;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.inbox-controls .filter-btn:hover {
+  background: #2d4b9e;
+}
