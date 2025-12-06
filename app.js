@@ -670,7 +670,11 @@ function handleCalendarNavigationUpdate() {
   if (selectedDateForTask) {
       const selectedDateObj = new Date(selectedDateForTask);
       if (selectedDateObj.getMonth() === month && selectedDateObj.getFullYear() === year) {
-          const dayElement = calendar.querySelector(`.calendar-day:not(.other-month):contains('${selectedDateObj.getDate()}')`);
+          // Find the day element by matching text content
+          const dayElements = calendar.querySelectorAll('.calendar-day:not(.other-month)');
+          const dayElement = Array.from(dayElements).find(el => 
+              el.textContent.trim() === String(selectedDateObj.getDate())
+          );
           if (dayElement) {
                setTimeout(() => {
                    if (calendar.contains(dayElement)) {
