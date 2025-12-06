@@ -658,29 +658,8 @@ button[type="submit"]:hover {
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  color: #333;
-  font-weight: 500;
-}
-
-.form-group input,
-.form-group textarea {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-.form-group textarea {
+.compose-form .form-group textarea {
   min-height: 200px;
-  resize: vertical;
 }
 
 .compose-actions {
@@ -1016,39 +995,4 @@ button[type="submit"]:hover {
   10% { opacity: 1; transform: translateY(0); }
   90% { opacity: 1; transform: translateY(0); }
   100% { opacity: 0; transform: translateY(-20px); }
-} 
-
-/* Inbox Controls */
-.inbox-controls {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.inbox-controls .search-box {
-  flex: 1;
-  margin-right: 10px;
-}
-
-.inbox-controls .search-box input {
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 14px;
-}
-
-.inbox-controls .filter-btn {
-  background: #3a5fc8;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-}
-
-.inbox-controls .filter-btn:hover {
-  background: #2d4b9e;
 }

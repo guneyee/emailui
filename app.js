@@ -364,6 +364,78 @@ function reRenderActiveView() {
     }
 }
 
+// Helper function to create email item element
+function createEmailItem(email) {
+    const item = document.createElement('div');
+    item.className = 'inbox-item';
+    if (email.isPinned) item.classList.add('pinned');
+    if (email.isDraft) item.classList.add('draft');
+    
+    const emailIndex = emails.indexOf(email);
+    
+    item.innerHTML = `
+      <div class="email-preview">
+        <div class="sender-info">
+          <img src="${email.avatar}" alt="${email.sender}" class="sender-avatar">
+          <div class="sender">${email.sender}</div>
+        </div>
+        <div class="email-content">
+          <div class="title">${email.title}</div>
+          <div class="snippet">${email.snippet}</div>
+        </div>
+        <div class="email-meta">
+          <span class="time">${new Date().toLocaleTimeString()}</span>
+          ${email.isPinned ? '<span class="pin-badge">📍</span>' : ''}
+          ${email.isDraft ? '<span class="draft-badge">Draft</span>' : ''}
+        </div>
+      </div>
+      <div class="email-actions">
+        <button class="pin-email-btn" data-index="${emailIndex}" title="${email.isPinned ? 'Unpin' : 'Pin'}">
+          ${email.isPinned ? '📍' : '📌'}
+        </button>
+        <button class="spam-email-btn" data-index="${emailIndex}" title="Mark as Spam">
+          🚫
+        </button>
+        <button class="trash-email-btn" data-index="${emailIndex}" title="Move to Trash">
+          🗑️
+        </button>
+      </div>
+    `;
+    
+    // Email item click handler
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.inbox-item').forEach(el => el.classList.remove('selected'));
+      item.classList.add('selected');
+      selectEmail(emailIndex);
+    });
+
+    // Action buttons click handlers
+    attachEmailActionHandlers(item, emailIndex);
+    
+    return item;
+}
+
+// Helper function to attach email action handlers
+function attachEmailActionHandlers(item, emailIndex) {
+    item.querySelector('.pin-email-btn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleEmailPin(emailIndex);
+      reRenderActiveView();
+    });
+
+    item.querySelector('.spam-email-btn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleSpam(emailIndex);
+      reRenderActiveView();
+    });
+
+    item.querySelector('.trash-email-btn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleTrash(emailIndex);
+      reRenderActiveView();
+    });
+}
+
 // Email functions
 function renderInbox() {
   inboxList.innerHTML = '';
@@ -399,69 +471,9 @@ function renderInbox() {
   emailCount.textContent = `${nonSpamEmails.length} emails`;
   inboxList.appendChild(emailCount);
 
-  nonSpamEmails.forEach((email, idx) => {
-    const item = document.createElement('div');
-    item.className = 'inbox-item';
-    if (email.isPinned) item.classList.add('pinned');
-    if (email.isDraft) item.classList.add('draft');
-    
-    item.innerHTML = `
-      <div class="email-preview">
-        <div class="sender-info">
-          <img src="${email.avatar}" alt="${email.sender}" class="sender-avatar">
-          <div class="sender">${email.sender}</div>
-        </div>
-        <div class="email-content">
-          <div class="title">${email.title}</div>
-          <div class="snippet">${email.snippet}</div>
-        </div>
-        <div class="email-meta">
-          <span class="time">${new Date().toLocaleTimeString()}</span>
-          ${email.isPinned ? '<span class="pin-badge">📍</span>' : ''}
-          ${email.isDraft ? '<span class="draft-badge">Draft</span>' : ''}
-        </div>
-      </div>
-      <div class="email-actions">
-        <button class="pin-email-btn" data-index="${emails.indexOf(email)}" title="${email.isPinned ? 'Unpin' : 'Pin'}">
-          ${email.isPinned ? '📍' : '📌'}
-        </button>
-        <button class="spam-email-btn" data-index="${emails.indexOf(email)}" title="Mark as Spam">
-          🚫
-        </button>
-        <button class="trash-email-btn" data-index="${emails.indexOf(email)}" title="Move to Trash">
-          🗑️
-        </button>
-      </div>
-    `;
-    
-    const emailIndex = emails.indexOf(email);
-    
-    // Email item click handler
-    item.addEventListener('click', () => {
-      document.querySelectorAll('.inbox-item').forEach(el => el.classList.remove('selected'));
-      item.classList.add('selected');
-      selectEmail(emailIndex);
-    });
-
-    // Action buttons click handlers
-    item.querySelector('.pin-email-btn').addEventListener('click', (e) => {
-      e.stopPropagation();
-      toggleEmailPin(emailIndex);
-      reRenderActiveView();
-    });
-
-    item.querySelector('.spam-email-btn').addEventListener('click', (e) => {
-      e.stopPropagation();
-      toggleSpam(emailIndex);
-      reRenderActiveView();
-    });
-
-    item.querySelector('.trash-email-btn').addEventListener('click', (e) => {
-      e.stopPropagation();
-      toggleTrash(emailIndex);
-      reRenderActiveView();
-    });
-
+  // Render email items
+  nonSpamEmails.forEach(email => {
+    const item = createEmailItem(email);
     inboxList.appendChild(item);
   });
 
@@ -622,7 +634,7 @@ function renderChart() {
 function renderSmartInbox() {
   // Clear the current inbox list and email detail
   inboxList.innerHTML = '';
-  emailDetail.innerHTML = '<h3>Email Detail</h3><p>Select an email to view details.</p>'; // Clear previous detail
+  emailDetail.innerHTML = '<h3>Email Detail</h3><p>Select an email to view details.</p>';
 
   // Filter for smart emails based on current criteria (pinned and title contains 'proposal' or 'chart')
   const smartEmails = emails.filter(email =>
@@ -635,74 +647,9 @@ function renderSmartInbox() {
     return;
   }
 
-  // Render the smart emails in the inbox list, similar to renderInbox
-  smartEmails.forEach((email, idx) => {
-    const item = document.createElement('div');
-    item.className = 'inbox-item';
-    if (email.isPinned) item.classList.add('pinned');
-    if (email.isDraft) item.classList.add('draft'); // Should not appear in smart inbox normally
-
-    item.innerHTML = `
-      <div class="email-preview">
-        <div class="sender-info">
-          <img src="${email.avatar}" alt="${email.sender}" class="sender-avatar">
-          <div class="sender">${email.sender}</div>
-        </div>
-        <div class="email-content">
-          <div class="email-meta">
-             <span class="time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-             ${email.isPinned ? '<span class="pin-badge">📍</span>' : ''}
-          </div>
-          <div class="title">${email.title}</div>
-          <div class="snippet">${email.snippet}</div>
-        </div>
-      </div>
-      <div class="email-actions">
-        <button class="pin-email-btn" data-index="${emails.indexOf(email)}" title="${email.isPinned ? 'Unpin' : 'Pin'}">
-          ${email.isPinned ? '📍' : '📌'}
-        </button>
-        <button class="spam-email-btn" data-index="${emails.indexOf(email)}" title="Mark as Spam">
-          🚫
-        </button>
-        <button class="trash-email-btn" data-index="${emails.indexOf(email)}" title="Move to Trash">
-          🗑️
-        </button>
-      </div>
-    `;
-
-    // Find the original index of the email in the main emails array
-    const emailIndex = emails.indexOf(email);
-
-    // Add click handler to select the email and display details
-    item.addEventListener('click', () => {
-      // Remove selected class from all email items in the current view
-      document.querySelectorAll('#inbox-list .inbox-item').forEach(el => el.classList.remove('selected'));
-      // Add selected class to the clicked item
-      item.classList.add('selected');
-      // Call selectEmail with the original index
-      selectEmail(emailIndex);
-    });
-
-    // Add event listeners for action buttons (pin, spam, trash)
-    item.querySelector('.pin-email-btn').addEventListener('click', (e) => {
-      e.stopPropagation();
-      toggleEmailPin(emailIndex);
-      reRenderActiveView(); // Re-render the current smart inbox view
-    });
-
-    item.querySelector('.spam-email-btn').addEventListener('click', (e) => {
-      e.stopPropagation();
-      toggleSpam(emailIndex);
-      reRenderActiveView(); // Re-render the current smart inbox view
-    });
-
-    item.querySelector('.trash-email-btn').addEventListener('click', (e) => {
-      e.stopPropagation();
-      toggleTrash(emailIndex);
-      reRenderActiveView(); // Re-render the current smart inbox view
-    });
-
-    // Append the created item to the inbox list
+  // Render the smart emails using the reusable helper
+  smartEmails.forEach(email => {
+    const item = createEmailItem(email);
     inboxList.appendChild(item);
   });
 
@@ -736,13 +683,8 @@ function renderCalendar() {
   `;
   calendar.appendChild(header);
 
-  header.querySelector('.prev-month').addEventListener('click', () => {
-    month--;
-    if (month < 0) {
-      month = 11;
-      year--;
-    }
-    renderCalendar();
+  // Helper function for handling post-navigation updates
+  function handleCalendarNavigationUpdate() {
     if (selectedDateForTask) {
         const selectedDateObj = new Date(selectedDateForTask);
         if (selectedDateObj.getMonth() === month && selectedDateObj.getFullYear() === year) {
@@ -761,13 +703,23 @@ function renderCalendar() {
     } else {
         const today = new Date();
         if (today.getMonth() === month && today.getFullYear() === year) {
-             displayTasksForDate(today.toDateString());
-             const todayElement = calendar.querySelector(`.calendar-day.current-date`);
-             if(todayElement) {
-                 todayElement.classList.add('selected');
-             }
+            displayTasksForDate(today.toDateString());
+            const todayElement = calendar.querySelector(`.calendar-day.current-date`);
+            if(todayElement) {
+                todayElement.classList.add('selected');
+            }
         }
     }
+  }
+
+  header.querySelector('.prev-month').addEventListener('click', () => {
+    month--;
+    if (month < 0) {
+      month = 11;
+      year--;
+    }
+    renderCalendar();
+    handleCalendarNavigationUpdate();
   });
 
   header.querySelector('.next-month').addEventListener('click', () => {
@@ -777,31 +729,7 @@ function renderCalendar() {
       year++;
     }
     renderCalendar();
-    if (selectedDateForTask) {
-        const selectedDateObj = new Date(selectedDateForTask);
-        if (selectedDateObj.getMonth() === month && selectedDateObj.getFullYear() === year) {
-            const dayElement = calendar.querySelector(`.calendar-day:not(.other-month):contains('${selectedDateObj.getDate()}')`);
-             if (dayElement) {
-                 setTimeout(() => {
-                     if (calendar.contains(dayElement)) {
-                         dayElement.click();
-                     }
-                 }, 50);
-             }
-        } else {
-            selectedDisplay.innerHTML = '';
-            selectedDateForTask = null;
-        }
-     } else {
-        const today = new Date();
-        if (today.getMonth() === month && today.getFullYear() === year) {
-            displayTasksForDate(today.toDateString());
-            const todayElement = calendar.querySelector(`.calendar-day.current-date`);
-             if(todayElement) {
-                 todayElement.classList.add('selected');
-             }
-        }
-     }
+    handleCalendarNavigationUpdate();
   });
 
   const weekHeader = document.createElement('div');
@@ -1240,17 +1168,7 @@ function renderComposeView() {
         sentEmailsList.innerHTML = '<p class="no-emails">No sent emails yet.</p>';
     } else {
         sentEmails.forEach(email => {
-            const emailItem = document.createElement('div');
-            emailItem.className = 'sent-email-item';
-            emailItem.innerHTML = `
-                <div class="sent-email-header">
-                    <span class="recipient">To: ${email.to}</span>
-                    <span class="date">${new Date(email.date).toLocaleString()}</span>
-                </div>
-                <div class="sent-email-subject">${email.subject}</div>
-                <div class="sent-email-message">${email.message}</div>
-            `;
-            sentEmailsList.appendChild(emailItem);
+            sentEmailsList.appendChild(createSentEmailItem(email));
         });
     }
     sentContainer.appendChild(sentEmailsList);
@@ -1350,6 +1268,21 @@ function renderComposeView() {
     });
 }
 
+// Helper function to create sent email item
+function createSentEmailItem(email) {
+    const emailItem = document.createElement('div');
+    emailItem.className = 'sent-email-item';
+    emailItem.innerHTML = `
+        <div class="sent-email-header">
+            <span class="recipient">To: ${email.to}</span>
+            <span class="date">${new Date(email.date).toLocaleString()}</span>
+        </div>
+        <div class="sent-email-subject">${email.subject}</div>
+        <div class="sent-email-message">${email.message}</div>
+    `;
+    return emailItem;
+}
+
 function renderSentEmailsList() {
     const sentContainer = document.getElementById('sent-container');
     if (!sentContainer) return;
@@ -1362,17 +1295,7 @@ function renderSentEmailsList() {
         sentEmailsList.innerHTML = '<p class="no-emails">No sent emails yet.</p>';
     } else {
         sentEmails.forEach(email => {
-            const emailItem = document.createElement('div');
-            emailItem.className = 'sent-email-item';
-            emailItem.innerHTML = `
-                <div class="sent-email-header">
-                    <span class="recipient">To: ${email.to}</span>
-                    <span class="date">${new Date(email.date).toLocaleString()}</span>
-                </div>
-                <div class="sent-email-subject">${email.subject}</div>
-                <div class="sent-email-message">${email.message}</div>
-            `;
-            sentEmailsList.appendChild(emailItem);
+            sentEmailsList.appendChild(createSentEmailItem(email));
         });
     }
 }
