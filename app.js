@@ -365,13 +365,11 @@ function reRenderActiveView() {
 }
 
 // Helper function to create email item element
-function createEmailItem(email) {
+function createEmailItem(email, emailIndex) {
     const item = document.createElement('div');
     item.className = 'inbox-item';
     if (email.isPinned) item.classList.add('pinned');
     if (email.isDraft) item.classList.add('draft');
-    
-    const emailIndex = emails.indexOf(email);
     
     item.innerHTML = `
       <div class="email-preview">
@@ -473,7 +471,8 @@ function renderInbox() {
 
   // Render email items
   nonSpamEmails.forEach(email => {
-    const item = createEmailItem(email);
+    const emailIndex = emails.indexOf(email);
+    const item = createEmailItem(email, emailIndex);
     inboxList.appendChild(item);
   });
 
@@ -649,7 +648,8 @@ function renderSmartInbox() {
 
   // Render the smart emails using the reusable helper
   smartEmails.forEach(email => {
-    const item = createEmailItem(email);
+    const emailIndex = emails.indexOf(email);
+    const item = createEmailItem(email, emailIndex);
     inboxList.appendChild(item);
   });
 
@@ -663,6 +663,35 @@ function renderSmartInbox() {
             firstRenderedItem.classList.add('selected');
         }
    }
+}
+
+// Helper function for handling post-navigation updates in calendar
+function handleCalendarNavigationUpdate() {
+  if (selectedDateForTask) {
+      const selectedDateObj = new Date(selectedDateForTask);
+      if (selectedDateObj.getMonth() === month && selectedDateObj.getFullYear() === year) {
+          const dayElement = calendar.querySelector(`.calendar-day:not(.other-month):contains('${selectedDateObj.getDate()}')`);
+          if (dayElement) {
+               setTimeout(() => {
+                   if (calendar.contains(dayElement)) {
+                       dayElement.click();
+                   }
+               }, 50);
+          }
+      } else {
+          selectedDisplay.innerHTML = '';
+          selectedDateForTask = null;
+      }
+  } else {
+      const today = new Date();
+      if (today.getMonth() === month && today.getFullYear() === year) {
+          displayTasksForDate(today.toDateString());
+          const todayElement = calendar.querySelector(`.calendar-day.current-date`);
+          if(todayElement) {
+              todayElement.classList.add('selected');
+          }
+      }
+  }
 }
 
 // Calendar functions
@@ -682,35 +711,6 @@ function renderCalendar() {
     <button class="calendar-nav next-month">&gt;</button>
   `;
   calendar.appendChild(header);
-
-  // Helper function for handling post-navigation updates
-  function handleCalendarNavigationUpdate() {
-    if (selectedDateForTask) {
-        const selectedDateObj = new Date(selectedDateForTask);
-        if (selectedDateObj.getMonth() === month && selectedDateObj.getFullYear() === year) {
-            const dayElement = calendar.querySelector(`.calendar-day:not(.other-month):contains('${selectedDateObj.getDate()}')`);
-            if (dayElement) {
-                 setTimeout(() => {
-                     if (calendar.contains(dayElement)) {
-                         dayElement.click();
-                     }
-                 }, 50);
-            }
-        } else {
-            selectedDisplay.innerHTML = '';
-            selectedDateForTask = null;
-        }
-    } else {
-        const today = new Date();
-        if (today.getMonth() === month && today.getFullYear() === year) {
-            displayTasksForDate(today.toDateString());
-            const todayElement = calendar.querySelector(`.calendar-day.current-date`);
-            if(todayElement) {
-                todayElement.classList.add('selected');
-            }
-        }
-    }
-  }
 
   header.querySelector('.prev-month').addEventListener('click', () => {
     month--;
